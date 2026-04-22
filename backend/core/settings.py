@@ -42,8 +42,18 @@ INSTALLED_APPS = [
     "reviews",
     "visits",
     "rest_framework",
-    'accounts.apps.AccountsConfig',
+    "accounts.apps.AccountsConfig",
 ]
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,  # Recommended: Issues a new refresh token on refresh
+    "BLACKLIST_AFTER_ROTATION": True,  # Recommended: Blacklists old refresh token
+}
 
 
 REST_FRAMEWORK = {
