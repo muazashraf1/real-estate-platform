@@ -63,7 +63,7 @@ class CustomTokenSerializer(TokenObtainPairSerializer):
     
 
 class AgentProfileSerializer(serializers.ModelSerializer):
-    bio = serializers.CharField(source='profile.bio')
+    bio = serializers.CharField(source='profile.bio', read_only=True)
     location = serializers.CharField(source='profile.location')
     phone = serializers.CharField(source= 'phone')
     address = serializers.CharField(source= 'address')

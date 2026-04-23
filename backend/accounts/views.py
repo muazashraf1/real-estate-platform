@@ -4,11 +4,15 @@ from accounts.serializers import (
     RegisterSerializer,
     ProfileSerializer,
     CustomTokenSerializer,
+    AgentProfileSerializer,
 )
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.shortcuts import get_object_or_404
+from rest_framework import generics
+from accounts.models import User
+
 
 # Create your views here.
 
@@ -66,12 +70,27 @@ class PublicProfileView(APIView):
             "is_agent": user.is_agent,
             "bio": profile.bio,
             "location": profile.location,
+            "phone" : user.phone,
+            "address" : user.address
         }
 
         return Response(data)
 
 
-class CustomTokenObtainPairView(
-    TokenObtainPairView
-):  # for adding the metadata in AccessToken
+class CustomTokenObtainPairView(TokenObtainPairView):  # for adding the metadata in AccessToken
     serializer_class = CustomTokenSerializer
+
+
+class AgentListView(generics.ListAPIView):
+    serializer_class = AgentProfileSerializer
+
+    def get_queryset(self):
+        queryset = User.objects.filter(is_agent=True)
+
+        location = self.request.query_params.get("location")
+
+        if location:
+            queryset = queryset.filter(profile__location__icontains=location)
+
+        return queryset
+
