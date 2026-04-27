@@ -91,3 +91,38 @@ class UpdateReviewView(APIView):
             return Response({"message": "Updated successfully"})
 
         return Response(serializer.errors, status=400)
+
+
+
+# ===== POSTMAN API testing
+
+#------------------- STEP 1: Register Users (2 users will be created)
+
+# 1. Agent User banao ---> POST http://127.0.0.1:8000/api/accounts/register/
+                        # {
+                        #   "username": "agent1",
+                        #   "email": "agent1@gmail.com",
+                        #   "password": "123456789",
+                        #   "password2": "123456789",
+                        #   "is_agent": true
+                        # }
+
+# 2. Normal User banao  --->  with same end point
+                    # {
+                    #   "username": "user1",
+                    #   "email": "user1@gmail.com",
+                    #   "password": "123456789",
+                    #   "password2": "123456789",
+                    #   "is_agent": false
+                    # }
+
+
+
+#------------------- STEP 2: Login (From Normal User)  ---> POST http://127.0.0.1:8000/api/accounts/token/
+
+#------------------- STEP 3: Set the  Authorization   
+
+#------------------- STEP 4: Create Review  ---> POST http://127.0.0.1:8000/api/reviews/create/   
+#------------------- STEP 5: Get Reviews  ---> GET http://127.0.0.1:8000/api/reviews/agent/id/   
+
+
