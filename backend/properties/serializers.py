@@ -5,30 +5,29 @@ from properties.models import *
 class PropertyCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Property
-        fields = [
-            "title",
-            "description",
-            "Price",
-            "property_status",
-            "property_type",
-            "city",
-            "address",
-        ]
+        fields = ["title", "description", "price", "status", "type", "city", "address"]
 
 
 class PropertyListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Property
-        fields = [
-            "title",
-            "description",
-            "Price",
-            "property_type",
-            "slug"
-        ]
+        fields = ["id", "title", "price", "city", "slug"]
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PropertyImage
+        fields = ["image", "is_primary"]
+
+
+class FeatureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PropertyFeature
+        fields = ["key", "value"]
 
 class PropertyDetailSerializer(serializers.ModelSerializer):
+    images = ImageSerializer(many=True, read_only=True)
+    feature = FeatureSerializer(many=True, read_only=True)
     class Meta:
-        models = Property
-        fields = '__all__'
-        
+        model = Property
+        fields = "__all__"
