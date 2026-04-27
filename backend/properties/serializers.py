@@ -26,3 +26,9 @@ class PropertyListSerializer(serializers.ModelSerializer):
             "property_type",
             "slug"
         ]
+
+class PropertyDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        models = Property
+        fields = '__all__'
+        
