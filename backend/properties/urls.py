@@ -4,9 +4,11 @@ from properties import views
 urlpatterns = [
     path("create/", views.CreatePropertyView.as_view()),
     path("my/", views.MyPropertyListView.as_view()),
-    path("<slug:slug>/", views.PropertyDetailView.as_view()),
+    path("search/", views.PropertySearchView.as_view()),
+
     path("update/<slug:slug>/", views.UpdatePropertyView.as_view()),
     path("delete/<slug:slug>/", views.DeletePropertyView.as_view()),
+    path("<slug:slug>/", views.PropertyDetailView.as_view()),
 ]
 
 

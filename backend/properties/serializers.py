@@ -14,6 +14,7 @@ class PropertyListSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "price", "city", "slug"]
 
 
+
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PropertyImage
@@ -27,7 +28,7 @@ class FeatureSerializer(serializers.ModelSerializer):
 
 class PropertyDetailSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
-    feature = FeatureSerializer(many=True, read_only=True)
+    features = FeatureSerializer(many=True, read_only=True)
     class Meta:
         model = Property
         fields = "__all__"
