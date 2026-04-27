@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from accounts.models import User
 from django.shortcuts import get_object_or_404
 from properties.serializers import PropertyCreateSerializer
-from properties.models import Property
+from properties.models import Property, PropertyImage, PropertyFeature
 
 # from django_filters.rest_framework import DjangoFilterBackend
 from properties.filters import PropertyFilter
@@ -162,34 +162,97 @@ class PropertySearchView(APIView):
 # 5.6 module
 
 
+# class UploadPropertyImageView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request, slug):
+#         prop = get_object_or_404(Property, slug=slug)
+#         serializer = ImageSerializer(prop)
+#         if request.user.is_primary:
+#             return True
+
+#         return Response(serializer.data)
+
+
 class UploadPropertyImageView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, slug):
         prop = get_object_or_404(Property, slug=slug)
-        serializer = ImageSerializer(prop)
-        if request.user.is_primary:
-            return True
 
-        return Response(serializer.data)
+        # permission check
+        if prop.agent != request.user:
+            return Response({"error": "Not allowed"}, status=403)
+
+        image = request.FILES.get("image")
+        is_primary = request.data.get("is_primary", False)
+
+        if not image:
+            return Response({"error": "Image required"}, status=400)
+
+        # if new primary, remove old primary
+        if is_primary:
+            PropertyImage.objects.filter(property=prop, is_primary=True).update(
+                is_primary=False
+            )
+
+        img = PropertyImage.objects.create(
+            property=prop, image=image, is_primary=is_primary
+        )
+
+        return Response({"message": "Image uploaded", "id": img.id})
+
+
+# class AddPropertyFeatureView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request):
+#         prop = get_object_or_404(Property, data=request.data)
+#         serializer = FeatureSerializer(prop)
+#         if serializer.is_valid():
+#             return Response({serializer.key: serializer.value})
+#         return Response(serializer.errors)
 
 
 class AddPropertyFeatureView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        prop = get_object_or_404(Property, data=request.data)
-        serializer = FeatureSerializer(prop)
-        if serializer.is_valid():
-            return Response({serializer.key: serializer.value})
-        return Response(serializer.errors)
+    def post(self, request, slug):
+        prop = get_object_or_404(Property, slug=slug)
+
+        if prop.agent != request.user:
+            return Response({"error": "Not allowed"}, status=403)
+
+        key = request.data.get("key")
+        value = request.data.get("value")
+
+        if not key or not value:
+            return Response({"error": "key and value required"}, status=400)
+
+        feature = PropertyFeature.objects.create(property=prop, key=key, value=value)
+
+        return Response({"message": "Feature added", "id": feature.id})
+
+
+# class DeletePropertyFeatureView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def delete(self, request, slug):
+#         prop = get_object_or_404(Property, slug=slug)
+
+#         prop.delete()
+#         return Response({"message": "Deleted Successfully!"})
 
 
 class DeletePropertyFeatureView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def delete(self, request, slug):
-        prop = get_object_or_404(Property, slug=slug)
+    def delete(self, request, id):
+        feature = get_object_or_404(PropertyFeature, id=id)
 
-        prop.delete()
-        return Response({"message": "Deleted Successfully!"})
+        if feature.property.agent != request.user:
+            return Response({"error": "Not allowed"}, status=403)
+
+        feature.delete()
+
+        return Response({"message": "Feature deleted"})
