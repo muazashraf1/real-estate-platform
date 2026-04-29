@@ -8,8 +8,10 @@ urlpatterns = [
     path("update/<slug:slug>/", views.UpdatePropertyView.as_view()),
     path("delete/<slug:slug>/", views.DeletePropertyView.as_view()),
     path("<slug:slug>/", views.PropertyDetailView.as_view()),
-    path("images/upload/", views.UploadPropertyImageView.as_view()),
-    path("features/add/", views.AddPropertyFeatureView.as_view()),
+    # path("images/upload/", views.UploadPropertyImageView.as_view()),
+    # path("features/add/", views.AddPropertyFeatureView.as_view()),
+    path("images/upload/<slug:slug>/", views.UploadPropertyImageView.as_view()),
+    path("features/add/<slug:slug>/", views.AddPropertyFeatureView.as_view()),
     path("features/delete/<int:id>/", views.DeletePropertyFeatureView.as_view()),
 ]
 
@@ -57,3 +59,54 @@ urlpatterns = [
 #   "price": 4500000,
 #   "city": "Islamabad"
 # }
+
+
+# =================== 5.6 module testing
+
+
+# 1- register the user ---> POST http://127.0.0.1:8000/api/accounts/register/
+
+#             {
+#   "username": "ahmar",
+#   "email": "ahmar@gmail.com",
+#   "password": "12345678",
+#   "password2": "12345678",
+#   "is_agent": true
+# }
+
+
+# 2- the login the user ---> POST http://127.0.0.1:8000/api/accounts/token/
+
+#                 {
+#   "email": "ahmar@gmail.com",
+#   "password": "12345678"
+# }
+
+
+# 3- then create the property by authenticated user --> POST http://127.0.0.1:8000/api/properties/create/
+
+# {
+#   "title": "Modern House Lahore",
+#   "description": "Beautiful house",
+#   "price": 80000,
+#   "status": "sale",
+#   "type": "residential",
+#   "city": "Lahore",
+#   "address": "DHA Phase 5"
+# }   ---> here slug is created the will use in next step.
+
+
+# 4- upload the image by using the slug ----> POST http://127.0.0.1:8000/api/properties/images/upload/ahmar-house-lahore/
+
+
+# 5-add the features ----> POST http://127.0.0.1:8000/api/properties/features/add/villa-karachi/
+
+# in json
+#                   {
+                    #   "key": "bedrooms",
+                    #   "value": "4"
+                    # } 
+
+# 6- check the property detail ---> GET http://127.0.0.1:8000/api/properties/villa-karachi/
+
+# 7- delete the feature ---> DELETE http://127.0.0.1:8000/api/properties/features/delete/1/

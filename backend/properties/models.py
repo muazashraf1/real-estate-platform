@@ -74,7 +74,7 @@ class Property(models.Model):
 
 class PropertyImage(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to='properties/')
+    image = models.ImageField(upload_to='properties/images/')
     is_primary = models.BooleanField(default=False)
 
 class PropertyFeature(models.Model):
