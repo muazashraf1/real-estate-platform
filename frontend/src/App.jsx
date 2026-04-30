@@ -7,6 +7,7 @@ import Navbar from './components/Navbar'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Listings from './pages/Listings'
+import PropertyDetail from './pages/PropertyDetail'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path='/login-page' element={<Login />} />
         <Route path='/signup-page' element={<Signup />} />
         <Route path='/property-listing' element={<Listings/>} />
+        <Route path='/property/:slug' element={<PropertyDetail/>} />
       </Routes>
     </>
   )
