@@ -200,7 +200,10 @@ class UploadPropertyImageView(APIView):
         img = PropertyImage.objects.create(
             property=prop, image=image, is_primary=is_primary
         )
-
+        # AUTO FIX: agar koi primary nahi hai to first image ko primary bana do
+        if not PropertyImage.objects.filter(property=prop, is_primary=True).exists():
+            img.is_primary = True
+            img.save()
         return Response({"message": "Image uploaded", "id": img.id})
 
 

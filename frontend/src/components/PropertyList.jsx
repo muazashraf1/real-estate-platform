@@ -310,7 +310,7 @@ const PropertyList = () => {
                 <h2 className="text-2xl font-semibold">Featured Properties</h2>
 
                 <button
-                    onClick={() => navigate("/properties")}
+                    onClick={() => navigate("/property-listing")}
                     className="text-sm font-medium text-blue-600 hover:underline"
                 >
                     Explore More →
