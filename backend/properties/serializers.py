@@ -11,9 +11,12 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
 class PropertyListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Property
-        fields = ["id", "title", "price", "city", "slug"]
+        fields = ["id", "title", "price", "city", "slug", "primary_image"]
 
 
+        def get_primary_image(self, obj):
+            image = obj.images.filter(is_primary=True).first()
+            return image.image.url if image else None
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:

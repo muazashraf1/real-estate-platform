@@ -48,7 +48,7 @@ class MyPropertyListView(APIView):
     def get(self, request):
         if request.user.is_staff:
             prop = Property.objects.all()
-            # serializer = PropertyListSerializer(prop)
+            serializer = PropertyListSerializer(prop, many=True)
             return Response(serializer.data)
         else:
             prop = Property.objects.filter(agent=request.user)
