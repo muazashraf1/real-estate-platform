@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Search, Menu, X } from "lucide-react";
 
 function Navbar() {
+  const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <nav className="w-full bg-white/80 backdrop-blur-md shadow-sm fixed top-0 left-0 z-50">
-      
+
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
         {/* Logo */}
@@ -33,11 +34,9 @@ function Navbar() {
           </button>
 
           {/* Login */}
-          <Link to="/login">
-            <button className="px-5 py-2 bg-black text-white rounded-lg hover:bg-orange-500 transition duration-300">
-              Login
-            </button>
-          </Link>
+          <button onClick={() => navigate('/login-page')} className="px-5 py-2 bg-black text-white rounded-lg hover:bg-orange-500 transition duration-300">
+            Login
+          </button>
 
         </div>
 
@@ -59,11 +58,11 @@ function Navbar() {
           <p className="hover:text-orange-500 cursor-pointer">Property</p>
           <p className="hover:text-orange-500 cursor-pointer">Blog</p>
 
-          <Link to="/login">
-            <button className="w-full bg-black text-white py-2 rounded-lg">
-              Login
-            </button>
-          </Link>
+
+          <button onClick={() => navigate('/login-page')} className="w-full bg-black text-white py-2 rounded-lg">
+            Login
+          </button>
+
         </div>
       )}
     </nav>
