@@ -138,7 +138,7 @@ class PropertySearchView(APIView):
 
         # --- Pagination ---
         page = int(request.GET.get("page", 1))
-        limit = 5
+        limit = 6
 
         start = (page - 1) * limit
         end = start + limit
@@ -157,6 +157,7 @@ class PropertySearchView(APIView):
         return Response(
             {"count": total, "page": page, "limit": limit, "results": serializer.data}
         )
+
 
 
 # 5.6 module

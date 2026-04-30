@@ -8,20 +8,16 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
         fields = ["title", "description", "price", "status", "type", "city", "address"]
 
 
-class PropertyListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Property
-        fields = ["id", "title", "price", "city", "slug", "primary_image"]
+# class PropertyListSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Property
+#         fields = ["id", "title", "price", "city", "slug", "primary_image"]
 
 
-        def get_primary_image(self, obj):
-            image = obj.images.filter(is_primary=True).first()
-            return image.image.url if image else None
-
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PropertyImage
-        fields = ["image", "is_primary"]
+#         def get_primary_image(self, obj):
+#             image = obj.images.filter(is_primary=True).first()
+#
+#          return image.image.url if image else None
 
 
 class FeatureSerializer(serializers.ModelSerializer):
@@ -29,9 +25,38 @@ class FeatureSerializer(serializers.ModelSerializer):
         model = PropertyFeature
         fields = ["key", "value"]
 
+
+class PropertyListSerializer(serializers.ModelSerializer):
+    primary_image = serializers.SerializerMethodField()
+    features = FeatureSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Property
+        fields = [
+            "id",
+            "title",
+            "price",
+            "city",
+            "slug",
+            "primary_image",
+            "features",
+        ]
+
+    def get_primary_image(self, obj):
+        image = obj.images.filter(is_primary=True).first()
+        return image.image.url if image else None
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PropertyImage
+        fields = ["image", "is_primary"]
+
+
 class PropertyDetailSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
     features = FeatureSerializer(many=True, read_only=True)
+
     class Meta:
         model = Property
         fields = "__all__"
