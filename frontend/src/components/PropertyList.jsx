@@ -278,6 +278,8 @@
 
 
 
+// ---- final 
+
 import React, { useContext, useEffect } from "react";
 import { PropertyContext } from "../context/PropertyContext";
 import { useNavigate } from "react-router-dom";
@@ -293,7 +295,7 @@ const PropertyList = () => {
     useEffect(() => {
         fetchHomeProperties();
     }, []);
-
+    
     if (loading) {
         return <p className="text-center mt-10">Loading properties...</p>;
     }
@@ -344,7 +346,7 @@ const PropertyList = () => {
 
                             {/* City */}
                             <p className="text-sm text-gray-600 flex items-center gap-2">
-                                📍 {property.city}
+                                🏢 {property.address}
                             </p>
 
                             {/* Features */}
@@ -373,7 +375,7 @@ const PropertyList = () => {
                                 </button>
 
                                 <p className="text-lg font-bold">
-                                    Rs. {property.price}
+                                    $ {property.price}
                                 </p>
                             </div>
                         </div>
@@ -385,3 +387,5 @@ const PropertyList = () => {
 };
 
 export default PropertyList;
+
+

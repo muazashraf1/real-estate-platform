@@ -40,6 +40,7 @@ class PropertyListSerializer(serializers.ModelSerializer):
             "slug",
             "primary_image",
             "features",
+            "address"
         ]
 
     def get_primary_image(self, obj):
